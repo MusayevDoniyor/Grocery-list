@@ -12,7 +12,7 @@ const ItemList = ({ item, handleCheck, handleDelete }) => {
         style={item.checked ? { textDecoration: "line-through" } : null}
         onDoubleClick={() => handleCheck(item.id)}
       >
-        {item.item}
+        {item.item.toUpperCase()}
       </label>
       <FaTrashAlt
         onClick={() => handleDelete(item.id)}

@@ -41,7 +41,7 @@ function App() {
   }, []);
 
   const handleAdd = async () => {
-    const id = items.length + 1;
+    const id = items.length ? items[items.length - 1].id + 1 : 1;
     const item = {
       id,
       item: newItem,
@@ -63,7 +63,6 @@ function App() {
       }
 
       setNewItem("");
-      // Refetch items to update the list
       const fetchItems = await fetch(`${api_url}/items`);
       const newItems = await fetchItems.json();
       setItems(newItems);
@@ -83,26 +82,25 @@ function App() {
         throw new Error(`Network response was not ok: ${errorText}`);
       }
 
-      // Refetch items to update the list
-      const fetchItems = await fetch(`${api_url}/items`);
-      const newItems = await fetchItems.json();
-      setItems(newItems);
+      const filteredItems = items.filter((item) => item.id !== id);
+      setItems(filteredItems);
     } catch (error) {
       console.error("Error deleting item:", error.message);
+      setFetchError(error.message);
     }
   };
 
   const handleCheck = async (id) => {
-    const itemToCheck = items.find((item) => item.id === id);
-    const updatedItem = { ...itemToCheck, checked: !itemToCheck.checked };
-
     try {
+      const updatedItem = items.find((item) => item.id === id);
+      if (!updatedItem) throw new Error("Updated item not found");
+
       const response = await fetch(`${api_url}/items/${id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedItem),
+        body: JSON.stringify({ checked: !updatedItem.checked }),
       });
 
       if (!response.ok) {
@@ -110,10 +108,10 @@ function App() {
         throw new Error(`Network response was not ok: ${errorText}`);
       }
 
-      // Refetch items to update the list
-      const fetchItems = await fetch(`${api_url}/items`);
-      const newItems = await fetchItems.json();
-      setItems(newItems);
+      const updatedItems = items.map((item) =>
+        item.id === id ? { ...item, checked: !item.checked } : item
+      );
+      setItems(updatedItems);
     } catch (error) {
       console.error("Error updating item:", error.message);
     }
