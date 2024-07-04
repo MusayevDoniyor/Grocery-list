@@ -1,11 +1,6 @@
 {
   "items": [
     {
-      "id": 4,
-      "item": "dgfb",
-      "checked": true
-    },
-    {
       "id": 2,
       "item": "bread",
       "checked": true
@@ -13,6 +8,11 @@
     {
       "id": 3,
       "item": "banana",
+      "checked": false
+    },
+    {
+      "id": 4,
+      "item": "milk",
       "checked": false
     }
   ]

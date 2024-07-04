@@ -13,7 +13,7 @@ function App() {
   const [search, setSearch] = useState("");
   const [fetchError, setFetchError] = useState(null);
 
-  const api_url = "http://localhost:3000";
+  const api_url = "https://server-grocery-list.onrender.com";
 
   useEffect(() => {
     async function fetchItems() {
