@@ -49,6 +49,7 @@ function App() {
     };
 
     try {
+      setIsLoading(false);
       const response = await fetch(`${api_url}/items`, {
         method: "POST",
         headers: {
@@ -68,11 +69,14 @@ function App() {
       setItems(newItems);
     } catch (error) {
       console.error("Error creating new item:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${api_url}/items/${id}`, {
         method: "DELETE",
       });
@@ -87,11 +91,14 @@ function App() {
     } catch (error) {
       console.error("Error deleting item:", error.message);
       setFetchError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleCheck = async (id) => {
     try {
+      setIsLoading(true);
       const updatedItem = items.find((item) => item.id === id);
       if (!updatedItem) throw new Error("Updated item not found");
 
@@ -114,6 +121,8 @@ function App() {
       setItems(updatedItems);
     } catch (error) {
       console.error("Error updating item:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
